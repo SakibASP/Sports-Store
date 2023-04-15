@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/09/2022 10:47:24" ReportInfo.Modified="11/09/2022 10:49:35" ReportInfo.CreatorVersion="2022.3.12.0">
+  <Styles Name="Blue">
+    <Style Name="Title" Font="Arial, 12pt, style=Bold"/>
+    <Style Name="Header" Fill.Color="LightSkyBlue" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Group" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Data" Font="Arial, 10pt"/>
+    <Style Name="Footer" Fill.Color="LightSkyBlue" Font="Arial, 10pt"/>
+    <Style Name="EvenRows" Fill.Color="AliceBlue" Font="Arial, 10pt"/>
+  </Styles>
+  <Dictionary>
+    <MsSqlDataConnection Name="Connection" ConnectionString="rijcmlqJUrEa/KIcQqhhcfnlqC6PGg5imbaGg6zUaNTAYc5sc03TfePxSblja2w5ZBQ6XB237zV4nv9alxZsD+YGjO8rQtBWTdwr9LqP7QjBlQCKmiIxcun4zt4YPmBelj5qWVzDuM/UFxRVLxwZC7U8fKZa3RgF9NyA/hJ4ZHaeqdFYMJr/TF1m44Hq/QlGgpK6bE42DDXzIvXYGF73RKfA9Q6IA==">
+      <TableDataSource Name="Products2" DataType="System.Int32" Enabled="true" TableName="Products">
+        <Column Name="ProductID" DataType="System.Int32"/>
+        <Column Name="Name" DataType="System.String"/>
+        <Column Name="Description" DataType="System.String"/>
+        <Column Name="Price" DataType="System.Double"/>
+        <Column Name="Cat_Id" DataType="System.Int32"/>
+        <Column Name="CREATED_BY" DataType="System.String"/>
+        <Column Name="CREATED_DATE" DataType="System.DateTime"/>
+        <Column Name="CURRENT_STOCK" DataType="System.Int32"/>
+        <Column Name="Buying_Price" DataType="System.Double"/>
+        <Column Name="IsAvailabe" DataType="System.Boolean" BindableControl="CheckBox"/>
+      </TableDataSource>
+    </MsSqlDataConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="37.8">
+      <TextObject Name="Text1" Width="718.2" Height="37.8" Dock="Fill" Text="Buy History" HorzAlign="Center" VertAlign="Center" Font="Arial, 12pt, style=Bold" Style="Title"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="41.8" Width="718.2" Height="28.35">
+      <TextObject Name="Text3" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="ProductID" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text5" Left="103.95" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="Name" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text7" Left="207.9" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="Price" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text9" Left="311.85" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="CREATED_BY" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text11" Left="415.8" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="CREATED_DATE" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text13" Left="519.75" Width="103.95" Height="18.9" Fill.Color="LightSkyBlue" Text="CURRENT_STOCK" Font="Arial, 10pt, style=Bold" Style="Header"/>
+      <TextObject Name="Text15" Left="623.7" Width="94.5" Height="18.9" Fill.Color="LightSkyBlue" Text="Buying_Price" Font="Arial, 10pt, style=Bold" Style="Header"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="74.15" Width="718.2" Height="18.9" EvenStyle="EvenRows" DataSource="Products2">
+      <TextObject Name="Text2" Width="103.95" Height="18.9" Text="[Products2.ProductID]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text4" Left="103.95" Width="103.95" Height="18.9" Text="[Products2.Name]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text6" Left="207.9" Width="103.95" Height="18.9" Text="[Products2.Price]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text8" Left="311.85" Width="103.95" Height="18.9" Text="[Products2.CREATED_BY]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text10" Left="415.8" Width="103.95" Height="18.9" Text="[Products2.CREATED_DATE]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text12" Left="519.75" Width="103.95" Height="18.9" Text="[Products2.CURRENT_STOCK]" Font="Arial, 10pt" Style="Data"/>
+      <TextObject Name="Text14" Left="623.7" Width="94.5" Height="18.9" Text="[Products2.Buying_Price]" Font="Arial, 10pt" Style="Data"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="97.05" Width="718.2" Height="18.9">
+      <TextObject Name="Text16" Width="718.2" Height="18.9" Dock="Fill" Fill.Color="LightSkyBlue" Text="[PageN]" HorzAlign="Right" Font="Arial, 10pt" Style="Footer"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

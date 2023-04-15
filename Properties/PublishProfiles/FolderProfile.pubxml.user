@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\inetpub\wwwroot\sportsstore</_PublishTargetUrl>
+    <History>False|2022-09-25T17:40:08.9232492Z;False|2022-09-25T23:39:10.3591425+06:00;False|2022-09-25T23:34:53.0570238+06:00;False|2022-09-25T23:33:42.0958248+06:00;False|2022-09-25T23:31:44.1668292+06:00;False|2022-09-25T23:30:19.6317412+06:00;False|2022-09-25T23:29:19.7434832+06:00;False|2022-09-25T23:24:56.1219647+06:00;False|2022-09-25T23:23:08.1519900+06:00;True|2022-09-23T23:59:20.9760239+06:00;False|2022-09-23T23:55:47.5719598+06:00;False|2022-09-23T23:52:49.9027798+06:00;False|2022-09-23T23:51:18.0231608+06:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=%28local%29%3b Initial Catalog=SportsStore%3b uid=sa%3bpwd=sakib%40123</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="SportsStore.Data.ApplicationDbContext">
+      <Value>Data Source=%28local%29%3b Initial Catalog=SportsStore%3b uid=sa%3bpwd=sakib%40123</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

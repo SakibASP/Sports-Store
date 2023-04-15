@@ -1,0 +1,19 @@
+﻿
+@model SportsStore.Models.ViewModels.RolesViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Role</h1>
+<form asp-action="EditRole" asp-controller="RoleManager">
+    <div class="form-group">
+        <input type="hidden" asp-for="Id" />
+        <label asp-for="roleName" class="control-label"></label>
+        <input asp-for="roleName" class="form-control" />
+        <span asp-validation-for="roleName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>

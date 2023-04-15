@@ -1,0 +1,174 @@
+﻿@using SportsStore.ReportModels
+@using SportsStore.Models
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+
+    List<ReportViewModel> reportParam = ViewData["ReportParams"] as List<ReportViewModel>;
+    List<Product> products = ViewData["Orders"] as List<Product>;
+}
+
+<div class="container-fluid">
+    <div class="card bg-transparent">
+        <div class="card-heading bg-info text-white">Product Buy History</div>
+        <div class="card-body">
+            <form asp-action="PeriodicalBuy" asp-controller="Report" method="post">
+
+                @foreach (ReportViewModel rvm in reportParam)
+                {
+                    <div class="row">
+                        <div class="col-4">
+                            <p>
+                                <strong>Start Date : &nbsp;</strong>
+                                @Html.EditorFor(m=>rvm.StartDate)
+                            </p>
+
+                        </div>
+                        <div class="col-4">
+                            <p>
+                                <strong>End Date : &nbsp;</strong>
+                                @Html.EditorFor(m=>rvm.EndDate)
+                            </p>
+                        </div>
+                        <div class="col-4">
+                            <p>
+                                <input type="submit" value="Preview" style="width:100px;background-color:midnightblue;color:white;" />
+                            </p>
+                        </div>
+                        
+                    </div>
+                }
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@if (ViewBag.Orders != null)
+{
+    <div id="Grid">
+        <p> <h4> Product Buy History </h4> </p>
+        <p>
+            From &nbsp;<strong>@reportParam.FirstOrDefault().StartDate.Date.ToString("dd/MMM/yyyy")
+            </strong> &nbsp; to &nbsp;<strong>@reportParam.FirstOrDefault().EndDate.Date.ToString("dd/MMM/yyyy")</strong>
+        </p>
+        <table class="table table-striped" cellpadding="5" cellspacing="0" style="border: 1px solid #ccc;font-size: 9pt;">
+            <thead>
+                <tr>
+                    <th style="background-color: #B8DBFD;border: 1px solid #ccc">Name</th>
+                    <th style="background-color: #B8DBFD;border: 1px solid #ccc">Stock</th>
+                    <th style="background-color: #B8DBFD;border: 1px solid #ccc">Unit Price</th>
+                    <th style="background-color: #B8DBFD;border: 1px solid #ccc">Total Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (Product product in products)
+                {
+                    <tr>
+                        <td style="width:120px;border: 1px solid #ccc">@product.Name</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.CURRENT_STOCK</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.Buying_Price</td>
+                        <td style="width:120px;border: 1px solid #ccc">@product.TOTAL_PRICE</td>
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right">Grand Total: &nbsp; @products.Count()</td>
+                    <td class="text-right">@products.Sum(x=>x.CURRENT_STOCK)</td>
+                    <td class="text-right">@products.Sum(x=>x.Price)</td>              
+                    <td class="text-right">@products.Sum(x=>x.TOTAL_PRICE)</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <br />
+    <form asp-action="Export" asp-controller="Report" target="_blank" method="post">
+        @Html.Hidden("GridHtml")
+        <input type="submit" id="btnSubmit" value="PDF" style="width:100px;background-color:maroon;color:white;" />
+    </form>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script type="text/javascript">
+        $(function () {
+            $("#btnSubmit").click(function () {
+                //var a = $("input[name='GridHtml']").val();
+                var a = $("#GridHtml").val();
+                var b = $("#Grid").html();
+
+                //alert(a);
+                //alert(b);
+
+                $("#GridHtml").val($("#Grid").html());
+            });
+        });
+    </script>
+
+}
+
+
+
+@*@model SportsStore.ReportModels.ReportViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <h4><strong>Parameters</strong></h4>
+    @using (Html.BeginForm("PeriodicalBuy", "Report", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-2">
+                <p>
+                    <strong>Start Date : &nbsp;</strong>
+                </p>
+                <p>
+                    <strong>End Date : &nbsp;</strong>
+                </p>
+
+            </div>
+            <div class="col-10">
+                <p>@Html.EditorFor(m=>m.StartDate, new { @class = "form-control", style = "width:60px;" })</p>
+                <p>@Html.EditorFor(m=>m.EndDate, new { @class = "form-control",  style = "width:100px" })</p>
+            </div>
+            <p>
+                <input type="submit" value="Preview" class="btn btn-primary" style="width:100px;" />
+            </p>
+        </div>
+    }
+</div>
+<div>
+    @if (ViewBag.WebReport != null)
+    {
+        @await ViewBag.WebReport.Render();
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+
+            var start = $("#StartDate").val();
+            var end = $("#EndDate").val();
+
+            //alert(start);
+            //alert(end);
+
+        });
+    </script>
+
+}*@

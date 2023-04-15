@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!doctype html>
+<html lang="en">
+<style>
+    #long {
+        height: 350px;
+    }
+</style>
+<body>
+<div class="container">
+    
+    <div class="container">
+        <div class="row">
+            @*<div class="col-2">
+            </div>*@
+            <div class="col-md-8">
+                <h4>
+                    Sports Store electronic platform
+                </h4>
+            </div>
+            @*<div class="col-2">
+            </div>*@
+        </div>     
+    </div>
+    <div class="container">
+        <div class="row">
+            @*<div class="col-2">
+            </div>*@
+            <div class="col-md-12">
+                <p>Online store for buying sports items.</p>
+            </div>
+            @*<div class="col-2">
+            </div>*@
+        </div>     
+    </div>
+
+    <div class="row" id="long" >
+        @* <div class="col-md-7">
+            <img typeof="foaf:Image" alt="" src="~/img/Sports.jpg" height="300" width="500" border="2" /> 
+            </div>
+            <div class="col-md-5">
+            <h2 class="title-medium text-bold">Current Stock</h2>
+            <div class="row">
+            <span class="float-end">Soccer  @ViewBag.Soccer %</span>
+            <progress value="@ViewBag.Soccer" max="100"></progress>
+            </div>
+            <div class="row">
+            <span>Watersports  @ViewBag.Watersports %</span>
+            <progress value="@ViewBag.Watersports" max="100"></progress>
+            </div>
+            <div class="row">
+            <span>Chess  @ViewBag.Chess %</span>
+            <progress value="@ViewBag.Chess" max="100"></progress>
+            </div>
+            <div class="row">
+            <span>Cricket  @ViewBag.Cricket %</span>
+            <progress value="@ViewBag.Cricket" max="100"></progress>
+            </div> 
+            </div>*@
+       
+            <div id="chartContainer" class="col-6">
+            </div>
+            <div class="col-2">
+            </div>
+            <div class="col-4">
+                <br />
+                <br />
+                <h2 class="title-medium">Overview</h2>
+                <ul>
+                    <li>Buy your desired sports product</li>
+                    <li>Justify products quality with other marketplace</li>
+                    <li>Justify cost with other marketplace</li>
+                    <li>Best in design</li>
+                    <li>Comfortable to use</li>
+                </ul>
+            </div>
+        </div>
+</div>
+    <br />
+    <br />
+    @*<marquee behavior="scroll" direction="right" onmouseover="this.stop();" onmouseout="this.start();">
+        <span>
+            <em>This e-commerce app is developed by MD. SAKIBUR RAHMAN. &nbsp; E-mail: sakibur.rahman.cse@gmail.com</em>
+        </span>
+    </marquee>*@
+</body>
+</html>
+
+@section Scripts{
+    <script src="~/js/canvasjs.min.js"></script>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var Watersports = '@ViewBag.Watersports';
+        var Cricket = '@ViewBag.Cricket';
+        var Chess = '@ViewBag.Chess';
+        var Soccer = '@ViewBag.Soccer';
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            //theme: "dark2",
+            backgroundColor: "transparent",
+            animationEnabled: true,
+            title: {
+                text: "Current Stock"
+            },
+            data: [
+                {
+                    type: "column",
+                    dataPoints: [
+                            { y: parseInt(Watersports), label: "Watersports" },
+                            { y: parseInt(Cricket), label: "Cricket" },
+                            { y: parseInt(Chess), label: "Chess" },
+                            { y: parseInt(Soccer), label: "Soccer" },
+                    ]
+                }
+            ]
+        });
+        chart.render();
+    };
+</script>
+}

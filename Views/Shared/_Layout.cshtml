@@ -1,0 +1,285 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SportsStore</title>
+
+    <style>
+
+        /*    .badge {
+          padding-left: 9px;
+          padding-right: 9px;
+          -webkit-border-radius: 9px;
+          -moz-border-radius: 9px;
+          border-radius: 9px;
+        }*/
+
+        /*.label-warning[href],
+        .badge-warning[href] {
+          background-color: #c67605;
+        }*/
+
+        #faBadge {
+            font-size: 12px;
+            background: #ff0000;
+            color: #fff;
+            padding: 0 3px;
+            vertical-align: top;
+            margin-left: -10px;
+        }
+    </style>
+
+    <style>
+        /* For Transparent background*/
+        /*body {
+            background-image: url('@Url.Content("~/img/bg.jpg")');
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Arial Rounded MT';
+        }
+
+        body {
+            margin: 0;
+            font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #212529;
+            text-align: left;
+            background-color: #fff;
+        }
+
+        input[type="text"] {
+            text-transform: uppercase;
+            border: solid;
+            border-color: black;
+            border-width: thin;
+            background-color: transparent;
+        }
+
+        input[type="number"] {
+            border: solid;
+            border-color: black;
+            border-width: thin;
+            background-color: transparent;
+        }
+
+        input[type="date"] {
+            border: solid;
+            border-color: black;
+            border-width: thin;
+            background-color: transparent;
+        }
+        */
+
+        /*.table{
+            background-color: white;
+        }*/
+    </style>
+
+    <style>
+        .dropdown-submenu {
+            position: relative;
+        }
+        .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -1px;
+        }
+
+        /* Hover Dropdown color */
+        .nav-link:hover {
+            -webkit-text-fill-color: lightseagreen;
+            /*-webkit-text-fill-color: midnightblue;*/
+        }
+
+        .nav-link {
+            font-family: Bahnschrift SemiBold;
+        }
+
+        @@media screen and (min-width: 831px) {
+            ul.navbar-nav li.dropdown:hover > ul.dropdown-menu {
+                display: block;
+            }
+            ul.navbar-nav li.dropdown-submenu:hover > ul.dropdown-menu {
+                display: block;
+            }
+        }
+        @@media screen and (max-width: 830px) {
+            ul.navbar-nav li.dropdown:hover > ul.dropdown-menu {
+                display: block;
+            }
+            ul.navbar-nav li.dropdown-submenu:hover > ul.dropdown-menu {
+                display: inline;
+            }
+        }
+    </style>
+
+    <style>
+        div.horizontal {
+            width: 100%;
+            height: 400px;
+            overflow: auto;
+        }
+        
+        @@keyframes TransformAnimation {
+            0% {
+                transform: scale(0,0);
+            }
+
+            100% {
+                transform: scale(1,1);
+            }
+        }
+
+         div.myContainer {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            animation: TransformAnimation 0.4s;
+        }
+
+        #rcorners {
+            border-radius: 25px;
+            border: inset;
+            border-color: aliceblue;
+            __background-position: left top;
+            __background-repeat: repeat;
+            __padding: 5px;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="~/lib/jquery/dist/jquery.min.js" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <script src="~/js/canvasjs.min.js"></script>
+
+</head>
+
+@*<script>
+        $(document).ready(function () {
+            $('.dropdown').on("click", function (e) {
+                e.stopPropagation();
+            });
+        });
+</script>*@ 
+<body>
+    <div class="navbar navbar-expand-lg navbar-toggleable-sm navbar-light bg-white fixed-top box-shadow mb-3">
+        <div class="container">            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>  
+            </button>
+            <div class="nav-item">
+                <a class="nav-link d-block d-sm-none" asp-controller="Cart" asp-action="Index">
+                    <span class="fa fa-shopping-cart" style="font-size:20px; color:gray;"></span>
+                    <span class="badge badge-warning" id="faBadge"> @ViewBag.CartTotal </span>
+                </a>
+            </div>
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/img/logo.png" width="80" height="40" />
+            </a>
+
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Home" asp-action="Index">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Product" asp-action="Index">PRODUCTS</a>
+                    </li>                      
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @await Component.InvokeAsync("Menu");
+                        @*
+                        <li>
+                                <a class="nav-link text-dark" href="https://sandbox.braintreegateway.com/merchants/hxcc3jsbtmkkjcpt/home">Payments</a>
+                        </li>
+                        <li>
+                                <a class="nav-link text-dark" href="#">Reports</a>
+                        </li>
+                        *@
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" style="font-size: medium; font:bold;" asp-area="" asp-controller="Home" asp-action="Privacy">PRIVACY</a>
+                    </li>
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        <br /><br /><br />
+        <div class="row" style="background-color:lightgray;border-radius:25px;">
+            <div class="row text-center">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                        <span style="color: darkblue; font-size: smaller; font:bold">WELCOME </span> <span style="color:dodgerblue; font-size: smaller; font: bold;">@User.Identity?.Name.ToUpper() !</span>
+                    </a>
+                }
+                else
+                {
+                    <br />
+                }
+            </div>
+        </div>
+        <div class="row">
+            <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
+                <span>
+                    @*<strong>WELCOME TO MY SPORTS SHOP. &nbsp; WE ARE PROVIDING THE BEST PRODUCT TO OUR CUSTOMERS.</strong>*@
+                    <em>Developed by MD. SAKIBUR RAHMAN &nbsp; E-mail: &nbsp; sakibur.rahman.cse@gmail.com</em>
+                </span>
+            </marquee>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                @if (@TempData["Error"] != null){
+                    <span class="text-center" style="font-size:medium;color:red;"><strong style="font:bold;"> Error:</strong> @TempData["Error"]</span>
+                }
+                @if (@TempData["Success"] != null){
+                    <span class="text-center" style="font-size:medium;color:green;"><strong style="font:bold;"> Success:</strong> @TempData["Success"]</span>
+                }
+                
+             </div>
+            @*<div class="text-center text-danger">@TempData["Error"]</div>*@
+        </div>
+        <div id="rcorners">
+            <div class="myContainer p-5">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Md. Sakibur Rahman - Microsoft ASP.NET Core MVC.
+        </div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+</body>
+</html>
+ 
+<script>
+    $(function () {
+        $("#cat_id").select2();
+    })
+    $(function () {
+        $("#Cat_Id").select2();
+    })
+</script>

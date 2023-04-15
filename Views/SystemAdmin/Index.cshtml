@@ -1,0 +1,184 @@
+﻿@model SportsStore.Helper.PaginatedList<SportsStore.Models.Product>
+
+@*@model IPagedList<SportsStore.Models.Product>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;*@
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<p>
+    <a asp-action="Create" class="btn btn-info">Create New</a>
+</p>
+
+    @using (Html.BeginForm("Index", "SystemAdmin", FormMethod.Get))
+    {
+        <div class="row">
+                <div class="col-2">
+                    @Html.DropDownList("cat_id",(SelectList)ViewBag.Cat_Id,"ALL",new { @style="width:150px;"})
+                </div>
+                <div class="col-10" style="text-align:right">
+                        <p style="color:black;"> 
+                            <strong><em>Sort with Category or search by Product/Category name:</em></strong>
+                            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string,null,new { @placeholder = "Search" })
+                            <input type="submit" value="Sort" style="width:90px;" />
+                        </p>
+       
+                </div>
+
+        </div>
+    }
+
+<div class="table-responsive">
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().CURRENT_STOCK)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Buying_Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Price)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.ImageData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageName)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.First().Category1.CategoryName)
+            </th>
+            <th>  
+            </th>
+            <th style="text-align:center;">  
+                Action
+            </th>
+            <th>  
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CURRENT_STOCK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Buying_Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @*<td>
+               @if(item.ImageData != null)
+               {
+                   <div style="margin:2px;">
+                        <a href="@Url.ActionLink("Details", "SystemAdmin", new { id = item.ProductID })">
+                             <img class="img-thumbnail" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" />
+                        </a>
+                    </div>
+               }
+               else
+               {
+                   <p>No Image</p>
+               }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageName)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Category1.CategoryName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductID" class="btn btn-success"><span class="fa fa-edit"></span></a>
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ProductID" class="btn btn-primary"><span class="fa fa-file-image"></span></a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.ProductID" class="btn btn-danger"><span class="fa fa-trash"></span></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+
+@*<div class="container">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter  }))
+</div>*@
+
+<div class="container">
+
+    @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter  }))*@
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        var LastDisabled = !Model.IsLastPage ? "disabled" : "";
+    }
+
+    <br />
+    Page &nbsp; @Model.PageIndex &nbsp; of &nbsp; @Model.TotalPages &nbsp;
+    <br />
+    <a href="@Url.Action("Index",new { page=1 })" class="btn btn-dark @prevDisabled"> <span class="fa fa-angle-double-left"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.PageIndex-1 })" class="btn btn-dark @prevDisabled"> <span class="fa fa-arrow-left"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.PageIndex+1 })" class="btn btn-dark @nextDisabled"> <span class="fa fa-arrow-right"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.TotalPages })" class="btn btn-dark @LastDisabled"> <span class="fa fa-angle-double-right"></span> </a>
+
+    @* <a asp-action="Index"
+    asp-route-sortOrder = "@ViewData["CurrentSort"]"
+    asp-route-pageNumber = "@(Model.PageIndex - 1)"
+    asp-route-currentFilter = "@ViewData["CurrentFilter"]"
+    class="btn btn-default @prevDisabled">
+    Previous
+    </a>
+    <a asp-action="Index"
+    asp-route-sortOrder="@ViewData["CurrentSort"]"
+    asp-route-pageNumber="@(Model.PageIndex + 1)"
+    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    class="btn btn-default @nextDisabled">
+    Next
+    </a>*@
+
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            //alert("Ready");
+            $("#cat_id").select2();
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $("#cat_id").change(function () {
+            this.form.submit();
+        });
+
+    </script>
+
+}

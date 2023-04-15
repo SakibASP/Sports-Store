@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SportsStore.Models.ShippingDetails>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1>Pending Orders</h1>
+
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NAME)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MOBLIE_NUMBER)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EMAIL)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LINE_1)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LINE_2)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LINE_3)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CITY)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.STATE)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ZIP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.COUNTRY)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GIFTWRAP)
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string GiftWrap = item.GIFTWRAP == true ? "Yes" : "No";
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NAME)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MOBLIE_NUMBER)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EMAIL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LINE_1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LINE_2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LINE_3)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CITY)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.STATE)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ZIP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.COUNTRY)
+                        </td>
+                        <td>
+                            @GiftWrap
+                        </td>
+                        <td>
+                            @*<a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.AUTO_ID" class="btn btn-info">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                <strong style="color:blue">Sorry, No pending request is available</strong>
+            </div>
+        </div>
+    }
+</div>

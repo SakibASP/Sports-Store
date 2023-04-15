@@ -1,0 +1,176 @@
+﻿@using Microsoft.AspNetCore.Html
+@using SportsStore.Models
+@model  IEnumerable<SportsStore.Models.ViewModels.MenuItemViewModel>
+@*@model IList<MCMS_Web.Models.DynamicMenuItem>*@
+@{
+    ViewBag.Title = "Index";
+}
+
+<html>
+<body>
+    <div class="container-fluid">
+        <div class="card bg-transparent">
+            <div class="card-heading bg-primary text-white">
+                <h4>Add Pages to a Role</h4>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Create", "AdminRights", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <p style="color:red">@TempData["ErrorMessage"]</p>
+                    <p style="color:green">@TempData["successMessage"]</p>
+
+                    <p>Role Name: @Html.DropDownList("RoleId", (IEnumerable<SelectListItem>)ViewBag.Roles, "Select ...")</p>
+
+                    {
+                        void  ShowTree(List<SportsStore.Models.MenuItem>? menusList) 
+                        {
+                            if (menusList != null)
+                            {
+                                foreach (var item in menusList)
+                                {
+                                    <ul>
+                                        <li>
+                                            @Html.CheckBoxFor(itm => item.IsSelected, htmlAttributes: new { @id = item.MenuId, @class="form-check-input" }) @item.MenuName
+                                            <ul>
+                                                @if (item.Children.Count() > 0)
+                                                {
+                                                    ShowTree(item.Children);
+                                                }
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                            }
+                        }
+                        var menuList = ViewBag.menusList as List<SportsStore.Models.MenuItem>;
+                        ShowTree(menuList);
+                    }
+                
+                }
+        <p><input type="submit" value="Save" class="btn-primary" onclick="submit_form();" /></p>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+<script>
+    $(document).ready(function () {
+        //var reportValue = $(this).children("option:selected").val();
+        //alert("JavaScript is working");
+        $("#RoleId").change(function() {
+                //uncheck all checkbox before load
+                $('input:checkbox').each(function () {
+                    $(this).prop("checked",false);
+                });
+                    
+                var RoleId = $(this).children("option:selected").val();
+                //alert(RoleId);
+                $.ajax({
+                    url: '@Url.Action("GetRoleWiseSelectedPages")' ,
+                    type: "POST",
+                    dataType: 'json',
+                    data: { roleId : RoleId } ,
+                    //contentType: "application/json; charset=utf-8",
+                         
+                    success: function (data) {
+                        //alert(data);
+                        //console.log(data);
+                        $.each(data, function (key, value) {
+                                $.each(value.MenuSelections, function (key, v) {
+                                    //alert(v.MenuId);
+                                    if (v.IsSelected == true)
+                                        $('#' + v.MenuId).prop('checked', true);
+                                    else
+                                        $('#' + v.MenuId).prop('checked', false);
+
+                                });
+
+                            });
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+        });
+            
+    });
+
+    //Select Parent item and it will check subsequent child items accordingly
+    //$('input[type=checkbox]').click(function () {
+    //    $(this).parent().find('li input[type=checkbox]').prop('checked', $(this).is(':checked'));
+    //    var sibs = false;
+    //    $(this).closest('ul').children('li').each(function () {
+    //        if ($('input[type=checkbox]', this).is(':checked'))
+    //            sibs = true;
+    //    })
+    //    // set the parent checkbox after check the children
+    //    $(this).parents('ul').prev().prop('checked', sibs);
+    //});
+
+        //Select Child item and it will check/uncheck parent items accordingly
+    //$('input[type=checkbox]').click(function () {
+    //    //alert($(this).is(':checked'));
+    //    if ($(this).is(':checked')) {
+    //        $(this).closest('ul').siblings('input:checkbox').attr('checked', true);
+    //        $(this).closest('ul').parent().closest('ul').prevAll('input:checkbox').attr('checked', true);
+    //        //alert('Item checked')
+    //    }
+    //});
+
+</script>
+
+<script type="text/javascript">
+    function submit_form() {
+        var RoleId = $("#RoleId").val();
+        var Model = [];
+        $('input:checkbox').each(function () {
+            var item = {};
+            //here the item name should be the same as your model
+            item["MenuId"] = $(this).attr("id");
+            item["IsSelected"] = $(this).prop("checked");
+            Model.push(item);
+        });
+        //alert(model);
+        //alert(RoleId);
+        
+        //var R_ID = JSON.stringify(roleId);
+        //var Model = JSON.stringify(model);
+
+        //var formated_data = JSON.stringify({
+        //    model: Model,
+        //    roleId: R_ID
+        //});
+        //alert(formated_data);
+
+        $.ajax({
+            url:'@Url.Action("UpdateRecords")',
+            type: "POST",
+            data: { model: Model, roleId: RoleId} ,//formated_data,
+            dataType: 'JSON',
+            //contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                alert(data);
+                //console.log(data);
+            },
+            error: function (req,status,err)
+            {
+                alert(req.status);
+                alert(err);
+            }
+        });
+        
+    }
+
+</script>
+}

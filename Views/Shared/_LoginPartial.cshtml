@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    if (!User.IsInRole("Basic"))
+    {
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="ShippingDetails" asp-action="PendingIndex">
+            <span class="fa fa-bell" style="font-size:20px"></span>
+            <span class="badge badge-warning" id="faBadge"> @ViewBag.OrdersPending </span>
+        </a>
+    </li>
+    }
+    
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Cart" asp-action="Index">
+            <span class="fa fa-shopping-cart" style="font-size:20px"></span>
+            <span class="badge badge-warning" id="faBadge"> @ViewBag.CartTotal </span>
+        </a>
+    </li>
+
+    @*<li class="nav-item">
+        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+    </li>*@
+
+    @*<li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-white">Logout</button>
+        </form>
+    </li>*@
+
+    <li class="nav-item dropdown">
+        @if (UserManager.GetUserAsync(User).Result.ProfilePicture != null)
+        {
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <img style="width:40px;height:40px; object-fit:cover; border-radius:30px" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))">
+            </a>           
+        }
+        else {
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <span class="fa fa-user-circle" style="font-size:20px"></span>
+            </a>
+        }
+        <ul class="dropdown-menu">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Cart" asp-action="Index">
+            <span class="fa fa-shopping-cart" style="font-size:20px"></span>
+            <span class="badge badge-warning" id="faBadge"> @ViewBag.CartTotal </span>
+        </a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link " href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="fa fa-user-circle" style="font-size:20px"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>
+            <li>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        </ul>     
+    </li> 
+}
+</ul>

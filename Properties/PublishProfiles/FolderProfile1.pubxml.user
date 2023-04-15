@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\ASP.NET\Core MVC\SportsStore\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2022-10-12T10:16:47.0324757Z;True|2022-10-12T16:16:10.1887756+06:00;True|2022-10-11T23:02:06.9552606+06:00;True|2022-10-11T22:25:10.6640700+06:00;True|2022-10-11T22:06:35.8012652+06:00;True|2022-10-11T20:36:04.4184349+06:00;True|2022-10-11T20:35:39.2682835+06:00;True|2022-10-05T21:22:35.3397922+06:00;True|2022-09-25T23:42:28.7288300+06:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

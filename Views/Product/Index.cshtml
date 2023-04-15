@@ -1,0 +1,398 @@
+﻿
+@*@model IPagedList<SportsStore.Models.ViewModels.ProductViewModel>*@
+
+@model SportsStore.Helper.PaginatedList<SportsStore.Models.ViewModels.ProductViewModel>
+
+@*@using X.PagedList.Mvc.Core;
+@using X.PagedList;*@
+@using SportsStore.Models
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .myimg {
+        transition: transform .2s; /* Animation */
+        margin: 0 auto;
+    }
+
+    .myimg:hover {
+        transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    }
+
+    /*.card-body:hover{
+        background-color:aliceblue;
+        color:black;
+    }*/
+
+    #AddCart:hover{
+        background-color: darkblue;
+    }
+
+    .myHiddenInput {
+        align-content:center;
+        align-items:center;
+        text-align:center;
+    }
+</style>
+
+<div class="container  d-none d-sm-block">
+    <div class="row">
+        <div class="col-3">
+
+        </div>
+        <div class="col-9">
+            <div class="text-center">
+                <h1>Products</h1>
+            </div>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-3">
+
+            <br /> <br />     
+            
+            <div class="row">
+                <h4><strong>Filter Option</strong></h4>
+                @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+                {
+                    <div style="text-align:left">
+                        <p>
+                            @Html.DropDownList("cat_id",(SelectList)ViewBag.Cat_Id,"All",new { @style="width:100px;" }) <strong>Category</strong>
+                        </p>
+                        <p>
+                            @Html.TextBox("price", null, new { @style="width:100px",@placeholder = "Price" }) <strong>Price Within</strong>
+                            @Html.ValidationMessageFor(model => model.First().Price, "", new { @class = "text-danger" })
+                        </p>
+                        <p>
+                            <input type="submit" value="Sort" class="btn btn-info" style="width:100px;" />
+                        </p>
+                    </div>
+                }
+            </div>
+
+            <br /><br />
+
+            <div class="row">
+                <h4><strong>Current Status</strong></h4>
+                <p>@Html.Editor("Price",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "Price" } }) <strong>Price</strong></p>
+                <p>@Html.Editor("CURRENT_STOCK",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CURRENT_STOCK" } }) <strong>Stock</strong></p>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="text-center">
+                @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+                {
+                    <p>
+                        @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter,null,new { @placeholder = "Search products" })
+                        <input type="submit" value="Search" style="font-weight: bold;" />
+                    </p>
+                }
+            </div>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-4">
+                        <div class="card bg-transparent">
+                            <div class="card-body">
+                                @Html.HiddenFor(x=>item.Price)
+                                @Html.HiddenFor(x=>item.CURRENT_STOCK)
+                                <div class="text-center">
+                                    @if (item.ImageData != null)
+                                    {
+                                        <div class="myimg" style="margin:2px;">
+                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
+                                                <img class="img-fluid" style="height:150px;width:150px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" />
+                                            </a>
+                                        </div>
+                                    }
+                                    <p class="card-title" style="font-family:Arial Black">@item.Name</p>
+                                    @*<h4>
+                                        <span>@item.Price.ToString("c")</span>
+                                    </h4>*@
+                                    <p class="card-text">
+                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new{ id = @item.ProductID })</span>
+                                    </p>
+                                </div>
+                            </div>                            
+                            <div>
+                                @using (Html.BeginForm("AddToCart", "Cart"))
+                                {
+                                    <div class="myHiddenInput">
+                                        @Html.Hidden("productId",item.ProductID)
+                                        @Html.Hidden("IsAvailabe",item.IsAvailabe)
+                                        @Html.Hidden("returnUrl", @Context.Request.Path)
+
+                                        @*@Html.Hidden("productId",@item.ProductID)
+                                        @Html.Hidden("IsAvailableM",@item.IsAvailabe)*@
+                                        <input type="submit" class="btn btn-success" value="Add To Cart" id="AddCart" />
+                                    </div>
+                                    <br/>
+                                }
+                            </div>                           
+                        </div>
+                        <br />
+                    </div>
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Mobile Page view*@
+<div class="container  d-block d-sm-none">
+    <div class="row">
+        <div class="text-center">
+            <h1>Products</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="text-center">
+            @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+            {
+                <p>
+                    @Html.TextBox("SearchString", ViewBag.CurrentFilter as string,null,new { @placeholder = "Search products" })
+                    <input type="submit" value="Search" style="font-weight: bold;" />
+                </p>
+            }
+        </div>
+
+        <br /><br />
+
+        <div class="row text-center">
+            <h4><strong>Filter Option</strong></h4>
+            @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+            {
+                <div class="row">
+                    <p>
+                        @Html.DropDownList("cat_id",(SelectList)ViewBag.Cat_Id,"All",new { @style="width:100px;", @id= "cat_id_m" })
+                    </p>
+                </div>
+                <div class="row">  
+                    <div class="col-6">
+                        <p>
+                            @Html.TextBox("price", null, new { @style="width:100px",@placeholder = "Price" })
+                            @Html.ValidationMessageFor(model => model.First().Price, "", new { @class = "text-danger" })
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            <input type="submit" value="Sort" class="btn-info" style="width:100px;" />
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <br /><br /><br />
+
+        <div class="row text-center">
+            <div class="row">
+                <div class="col-6">@Html.Label("Price",null,new { @style="font-weight:bold;" })</div>
+                <div class="col-6">@Html.Label("Stock",null,new { @style="font-weight:bold;" })</div>
+            </div>
+            <div class="row">
+                <div class="col-6">@Html.Editor("Price",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "PriceM" } }) </div>
+                <div class="col-6">@Html.Editor("CURRENT_STOCK",new { htmlAttributes = new { @style = "width:100px;background-color: MidnightBlue;color:white;font-size:18px;", @readonly = "readonly", @id = "CURRENT_STOCK_M" } })</div>
+            </div>
+        </div>
+
+        <br /><br />
+        <br /><br />
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card-group">
+                        <div class="card bg-light" style="height:275px;">
+                            <div class="card-body">
+                                @Html.HiddenFor(x=>item.Price , new { @id = "m_price" })
+                                @Html.HiddenFor(x=>item.CURRENT_STOCK, new { @id = "m_stock" })
+                                <div class="text-center">
+                                    @if (item.ImageData != null)
+                                    {
+                                        <div style="margin:2px;">
+                                            <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
+                                                <img class="img-fluid" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" />
+                                            </a>
+                                        </div>
+                                    }
+                                    <p class="card-title">@item.Name</p>
+                                    @*<h4>
+                                <span>@item.Price.ToString("c")</span>
+                                </h4>*@
+                                    <p class="card-text">
+                                        <span>@item.ShortDesc @Html.ActionLink("see details","Details","Product", new { id = @item.ProductID })</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div>
+                                @using (Html.BeginForm("AddToCart", "Cart"))
+                                {
+                                    <div class="text-center">
+                                        @Html.Hidden("productId",item.ProductID)
+                                        @Html.Hidden("IsAvailabe",item.IsAvailabe)
+                                        @Html.Hidden("returnUrl", @Context.Request.Path)
+                                        
+                                        @*@Html.Hidden("productId",@item.ProductID)
+                                        @Html.Hidden("IsAvailableM",@item.IsAvailabe)*@
+
+                                        <input type="submit" class="btn btn-success" value="Add To Cart" id="AddCart" />
+                                    </div>
+                                    <br />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+@*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter  }))*@
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var LastDisabled = !Model.IsLastPage ? "disabled" : "";
+}
+
+<br/>
+Page &nbsp; @Model.PageIndex &nbsp; of &nbsp; @Model.TotalPages &nbsp;
+<br />
+    <a href="@Url.Action("Index",new { page=1 })" class="btn btn-dark @prevDisabled"> <span class="fa fa-angle-double-left"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.PageIndex-1 })" class="btn btn-dark @prevDisabled"> <span class="fa fa-arrow-left"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.PageIndex+1 })" class="btn btn-dark @nextDisabled"> <span class="fa fa-arrow-right"></span> </a>
+    <a href="@Url.Action("Index",new { page=Model.TotalPages })" class="btn btn-dark @LastDisabled"> <span class="fa fa-angle-double-right"></span> </a>
+
+@* <a asp-action="Index"
+    asp-route-sortOrder = "@ViewData["CurrentSort"]"
+    asp-route-pageNumber = "@(Model.PageIndex - 1)"
+    asp-route-currentFilter = "@ViewData["CurrentFilter"]"
+    class="btn btn-default @prevDisabled">
+    Previous
+    </a>
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>*@
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+
+        $("#cat_id").change(function () {
+            this.form.submit();
+        });
+        
+        $("#cat_id_m").change(function () {
+            this.form.submit();
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        // Hover product details
+        $(".card").hover(
+            function () {
+                let stock = parseInt($(this).closest('.card').find('#item_CURRENT_STOCK').val());
+                let price = parseFloat($(this).closest('.card').find('#item_Price').val());     
+                //alert(price);
+                //alert(stock);
+
+
+                let Available = $(this).closest('.card').find('#IsAvailabe').val();
+                let Is_available = Available === "True" ? true : false;
+                let button_expire_value = "Out of stock";
+                if(!Is_available){
+                    $(this).closest('.card').find('#AddCart').val(button_expire_value);
+                    $(this).closest('.card').find('#AddCart').css('background-color', 'red');
+                    $(this).closest('.card').find('#AddCart').prop('disabled', true);
+                }
+                else{
+                    $(this).closest('.card').find('#AddCart').prop('disabled', false);
+                }
+                //$(this).closest('.card').find('#AddCart').click(function(){
+                //    CheckAvailable(Is_available);
+                //});
+                
+                //alert(Available);
+                
+                $("#Price").val(price);
+                $("#CURRENT_STOCK").val(stock);
+
+                // for Mobile
+                let stockM = parseInt($(this).closest('.card').find('#m_stock').val());
+                let priceM = parseFloat($(this).closest('.card').find('#m_price').val());
+                $("#PriceM").val(priceM);
+                $("#CURRENT_STOCK_M").val(stockM);
+            },
+            function () {
+                $("#Price").val(null);
+                $("#CURRENT_STOCK").val(null);
+
+                // for Mobile
+                $("#PriceM").val(null);
+                $("#CURRENT_STOCK_M").val(null);
+            }
+        );
+
+        //function CheckAvailable(Is_available) {
+            //alert(Is_available);
+            //if (!Is_available) {
+            //    alert("Sorry! This product is currently unavailabe.");
+            //    event.preventDefault();
+            //    return false;
+            //}
+            //$.ajax({
+            //    url: '@Url.Action("AddToCart","Cart")',
+            //    type: "POST",
+            //    dataType: 'json',
+            //    data: { roleId: RoleId },
+            //    //contentType: "application/json; charset=utf-8",
+
+            //    success: function (data) {
+            //        //alert(data);
+            //        //console.log(data);
+            //        $.each(data, function (key, value) {
+            //            $.each(value.MenuSelections, function (key, v) {
+            //                //alert(v.MenuId);
+            //                if (v.IsSelected == true)
+            //                    $('#' + v.MenuId).prop('checked', true);
+            //                else
+            //                    $('#' + v.MenuId).prop('checked', false);
+
+            //            });
+
+            //        });
+            //    },
+            //    error: function (xhr, ajaxOptions, thrownError) {
+            //        alert(xhr.status);
+            //        alert(thrownError);
+            //    }
+            //});
+        //}
+       
+    </script>
+
+}

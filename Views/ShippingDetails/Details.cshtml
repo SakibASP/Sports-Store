@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SportsStore.Models.ShipmentOrders>
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+<hr />
+<div>
+    @{
+        var name = Model.First()._ShippingDetails.NAME;
+    }
+    <h6> <strong>ORDERED BY :</strong> <em> @name.ToString() </em></h6>      
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PRODUCT_NAME)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.QUANTITY)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PRICE)
+                </th>
+                @*<th></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRODUCT_NAME)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QUANTITY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PRICE)
+                    </td>                   
+                    @*<td>
+                        <a asp-action="Edit" asp-route-id="@item.AUTO_ID">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.AUTO_ID">Delete</a>
+                    </td>*@
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-right">Total:</td>
+                <td class="text-right">@Model.Sum(x=>x.PRICE)</td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="text-center">
+        <a asp-action="CofirmOrder" asp-controller="ShippingDetails" asp-route-id="@Model.First().ShippingDetailsId" class="btn btn-success">Confirm</a>
+        <a asp-action="Delete" asp-controller="ShippingDetails" asp-route-id="@Model.First().ShippingDetailsId" class="btn btn-danger">Reject</a>
+    </div>
+</div>
+

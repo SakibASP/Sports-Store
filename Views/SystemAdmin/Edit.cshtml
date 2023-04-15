@@ -1,0 +1,81 @@
+﻿@model SportsStore.Models.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductID" />
+            <input type="hidden" asp-for="ImageName" />
+            <input type="hidden" asp-for="ImageData" />
+            <input type="hidden" asp-for="CREATED_BY" />
+            <input type="hidden" asp-for="CREATED_DATE" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Buying_Price" class="control-label"></label>
+                <input asp-for="Buying_Price" class="form-control" />
+                <span asp-validation-for="Buying_Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CURRENT_STOCK" class="control-label"></label>
+                <input asp-for="CURRENT_STOCK" class="form-control" />
+                <span asp-validation-for="CURRENT_STOCK" class="text-danger"></span>
+            </div>
+            @*<div>
+                @Html.DisplayNameFor(m=>m.ImageData)
+            </div>
+            <div>
+                @if (Model.ImageData != null)
+                {
+                    <img class="img-thumbnail" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(Model.ImageData)" />
+                }
+                else
+                {
+                    <p> No image </p>
+                }
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Cat_Id" class="control-label"></label>
+                <select asp-for="Cat_Id" class="form-control" asp-items="ViewBag.Cat_Id"></select>
+                <span asp-validation-for="Cat_Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageData" class="control-label"></label>
+                <input type="file" accept="image/*" asp-for="ImageData" class="form-control-file" multiple="multiple" />
+                <span asp-validation-for="ImageData" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
