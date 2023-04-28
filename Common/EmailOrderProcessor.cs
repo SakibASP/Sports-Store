@@ -17,7 +17,7 @@ namespace SportsStore.Data
         public string ServerName = "smtp.gmail.com";
         public int ServerPort = 587;
         public bool WriteAsFile = false;
-        public string FileLocation = @"D:\ASP.NET\Core MVC\SportsStore\Emails";
+        public string FileLocation = @"D:\Sakib Git\Sports Store\Emails";
     }
     public class EmailOrderProcessor : IOrderProcessor
     {

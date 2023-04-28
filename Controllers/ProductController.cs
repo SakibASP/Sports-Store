@@ -71,14 +71,7 @@ namespace SportsStore.Controllers
             //                 ShortDesc = Utility.TruncateDescription(e.Description, 10),
             //             }).Take(50000).ToList();
 
-            List<ProductViewModel>? product_mv = product_mv = Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageData == null).ToList();
-
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    product_mv = product_mv
-            //        .Where(s => (s.Name.ToLower().Contains(searchString.ToLower()) || s.Category.ToLower().Contains(searchString.ToLower())) && s.IsCover == 1  )
-            //        .ToList();
-            //}
+            List<ProductViewModel>? product_mv = Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageData == null).ToList();
 
             switch (sortOrder)
             {
@@ -90,33 +83,6 @@ namespace SportsStore.Controllers
                 default:
                     product_mv = product_mv.ToList();
                     break;
-                    //        .Where(p => p.IsCover == 1 && p.Cat_Id == cat_id)
-                    //        .OrderBy(s => s.Name)
-                    //        .ToList();
-
-                    // Name ascending 
-                    //if(cat_id != null)
-                    //{
-                    //    product_mv = Utility.GetProducts(_context)
-                    //        .Where(p => p.IsCover == 1 && p.Cat_Id == cat_id)
-                    //        .OrderBy(s => s.Name)
-                    //        .ToList();
-                    //}
-                    //if (price != null)
-                    //{
-                    //    product_mv = Utility.GetProducts(_context)
-                    //        .Where(c => (c.Price <= (float)price) && c.IsCover == 1)
-                    //        .OrderBy(s => s.Name)
-                    //        .ToList();
-                    //}
-                    //else
-                    //{
-                    //    //product_mv = product_mv.OrderBy(s => s.Name).ToList();
-                    //    product_mv = Utility.GetProducts(_context)
-                    //    .Where(p => p.IsCover == 1)
-                    //    .ToList();
-                    //}
-
             }
 
             int pageSize = 6;
