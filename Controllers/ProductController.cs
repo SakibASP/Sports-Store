@@ -14,6 +14,7 @@ using SportsStore.Data;
 using SportsStore.Helper;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
+using X.PagedList;
 //using X.PagedList;
 
 
@@ -29,7 +30,7 @@ namespace SportsStore.Controllers
 
         // GET: Product
         //image/jpeg
-        public ActionResult Index(int? cat_id,int? price, string? sortOrder, string? currentFilter, string? searchString,int? page)
+        public async Task<ActionResult> Index(int? cat_id,int? price, string? sortOrder, string? currentFilter, string? searchString,int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -71,20 +72,15 @@ namespace SportsStore.Controllers
             //                 ShortDesc = Utility.TruncateDescription(e.Description, 10),
             //             }).Take(50000).ToList();
 
-            List<ProductViewModel>? product_mv = Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageData == null).ToList();
+            var product_mv = await Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageData == null).ToListAsync();
 
-            switch (sortOrder)
+            product_mv = sortOrder switch
             {
-                case "name_desc":
-                    product_mv = product_mv
-                        .Where(p => p.IsCover == 1).OrderByDescending(s => s.Name)
-                        .ToList();
-                    break;
-                default:
-                    product_mv = product_mv.ToList();
-                    break;
-            }
-
+                "name_desc" => await product_mv
+                                        .Where(p => p.IsCover == 1).OrderByDescending(s => s.Name)
+                                        .ToListAsync(),
+                _ => await product_mv.ToListAsync(),
+            };
             int pageSize = 6;
             int pageNumber = (page ?? 1);
 

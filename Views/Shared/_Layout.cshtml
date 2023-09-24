@@ -227,7 +227,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                        <span style="color: darkblue; font-size: smaller; font:bold">WELCOME </span> <span style="color:dodgerblue; font-size: smaller; font: bold;">@User.Identity?.Name.ToUpper() !</span>
+                        <span style="color: darkblue; font-size: smaller; font:bold">WELCOME </span> <span style="color:dodgerblue; font-size: smaller; font: bold;">@User.Identity.Name!.ToUpper() !</span>
                     </a>
                 }
                 else

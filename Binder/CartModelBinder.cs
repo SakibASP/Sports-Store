@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
-using SportsStore.Data;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SportsStore.Helper;
 using SportsStore.Models;
 
@@ -10,7 +7,7 @@ namespace SportsStore.Binder
     public class CartModelBinder : IModelBinder
     {
         private const string sessionKey = "Cart";
-        public Task BindModelAsync( ModelBindingContext bindingContext)
+        public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             //get the cart from the session
             Cart? cart = null;

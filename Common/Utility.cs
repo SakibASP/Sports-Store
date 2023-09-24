@@ -46,7 +46,7 @@ namespace SportsStore.Common
             else
             {
                 // Otherwise return the empty string
-                return "";
+                return string.Empty;
             }
         }
         public static List<ProductViewModel> GetProducts(ApplicationDbContext db,int? p_id, int? cat_id_, int? price_, string? searchString_)

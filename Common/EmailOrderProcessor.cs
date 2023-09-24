@@ -1,19 +1,17 @@
 ﻿using System.Text;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
 using SportsStore.Models;
-using SportsStore.Common;
 
-namespace SportsStore.Data
+namespace SportsStore.Common
 {
     public class EmailSettings
     {
-        public string MailToAddress = "boyhell435@gmail.com";
-        public string MailFromAddress = "sakibur.rahman.cse@gmail.com";
+        public string MailToAddress = "sakibur.rahman.cse@gmail.com";
+        public string MailFromAddress = "sendemail.cssbd@gmail.com";
         public bool UseSsl = true;
-        public string Username = "sakibur.rahman.cse@gmail.com";
-        public string Password = "Hasib@Sakib12";
+        public string Username = "sendemail.cssbd@gmail.com";
+        public string Password = "laydleksjeddhzqn";
         public string ServerName = "smtp.gmail.com";
         public int ServerPort = 587;
         public bool WriteAsFile = false;
@@ -40,12 +38,12 @@ namespace SportsStore.Data
                     smtpClient.UseDefaultCredentials = false;
                     smtpClient.Credentials = new NetworkCredential(emailSettings.Username, emailSettings.Password);
 
-                    if (emailSettings.WriteAsFile)
-                    {
-                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                        smtpClient.PickupDirectoryLocation = emailSettings.FileLocation;
-                        smtpClient.EnableSsl = false;
-                    }
+                    //if (emailSettings.WriteAsFile)
+                    //{
+                    //    smtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                    //    smtpClient.PickupDirectoryLocation = emailSettings.FileLocation;
+                    //    smtpClient.EnableSsl = false;
+                    //}
                     StringBuilder body = new StringBuilder()
                                             .AppendLine("A new order has been submitted")
                                             .AppendLine("---")

@@ -19,7 +19,7 @@ namespace SportsStore.Helper
                         });
                 session.SetString(key, JsonString);
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
                 throw new Exception();
             }

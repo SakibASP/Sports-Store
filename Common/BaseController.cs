@@ -14,11 +14,10 @@ namespace SportsStore.Common
 {
     public abstract class BaseController<T> : Controller where T : BaseController<T>
     {
-        private ILogger<T>? _logger;
-
+        //private ILogger<T>? _logger;
         //private IDistributedCache _Cache;
         //protected IDistributedCache? cache => _Cache ?? throw new ArgumentNullException(nameof(_Cache));
-        protected ILogger<T>? Logger => _logger ?? (_logger = HttpContext.RequestServices.GetService<ILogger<T>>());
+        //protected ILogger<T>? Logger => _logger ?? (_logger = HttpContext.RequestServices.GetService<ILogger<T>>());
 
         public string? CurrentUserId { get; set; }
         public string? CurrentUserName;
@@ -34,7 +33,7 @@ namespace SportsStore.Common
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (filterContext.HttpContext.User.Identity!.IsAuthenticated)
             {
                 CurrentUserName = filterContext.HttpContext.User.Identity.Name;
                 CurrentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -46,7 +45,7 @@ namespace SportsStore.Common
             var SessionMenu = HttpContext.Session.GetObjectFromJsonList<DynamicMenuItem>(Constant.Menu);
             if(SessionMenu != null)
             {
-                var Menu = (IEnumerable<DynamicMenuItem>?)SessionMenu;
+                var Menu = (IEnumerable<DynamicMenuItem>)SessionMenu;
                 var path = Request.Path.ToString();
                 if (path != "/" && path.Split('/')[1] != "Home" && path.Split('/')[1] != "Product" && path.Split('/')[1] != "Cart" && path.Split('/')[1] != "Payment")
                 {

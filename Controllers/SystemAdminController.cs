@@ -9,6 +9,7 @@ using SportsStore.Data;
 using SportsStore.Helper;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
+using X.PagedList;
 //using X.PagedList;
 
 namespace SportsStore.Controllers
@@ -28,7 +29,7 @@ namespace SportsStore.Controllers
         }
 
         // GET: SystemAdmin
-        public ActionResult Index(int? cat_id,string? sortOrder, string? currentFilter, string? searchString, int? page)
+        public async Task<ActionResult> Index(int? cat_id,string? sortOrder, string? currentFilter, string? searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -40,29 +41,25 @@ namespace SportsStore.Controllers
 
             ViewData["CurrentFilter"] = searchString ?? "";
 
-            List<Product>? products = _context.Products.Include(x=>x.Category1).Take(10000).ToList();
+            List<Product>? products = await _context.Products.Include(x=>x.Category1).Take(100).ToListAsync();
 
             // From session
             if (cat_id != null)
-                products = _context.Products.Where(c => c.Cat_Id == cat_id).Take(10000).OrderBy(s => s.Name).ToList();
+                products = _context.Products.Where(c => c.Cat_Id == cat_id).Take(100).OrderBy(s => s.Name).ToList();
 
             if (!String.IsNullOrEmpty(searchString))
-                products = _context.Products.Include(x => x.Category1).Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()) || s.Category1.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(10000).ToList();
+                products = await _context.Products.Include(x => x.Category1).Where(s => s.Name!.ToUpper().Contains(searchString.ToUpper()) || s.Category1.CategoryName.ToUpper().Contains(searchString.ToUpper())).Take(100).ToListAsync();
 
-            switch (sortOrder)
+            products = sortOrder switch
             {
-                case "name_desc":
-                    products = products.OrderByDescending(s => s.Name).ToList();
-                    break;
-                default:  // Name ascending 
-                        products = products.OrderBy(s => s.Name).ToList();
-                    break;
-            }
-
+                "name_desc" => await products.OrderByDescending(s => s.Name).ToListAsync(),
+                // Name ascending 
+                _ => await products.OrderBy(s => s.Name).ToListAsync(),
+            };
             int pageSize = 6;
             int pageNumber = (page ?? 1);
 
-            ViewData["Cat_Id"] = new SelectList(_context.Category, "AUTO_ID", "CategoryName");
+            ViewData["Cat_Id"] = new SelectList(_context.Category.AsNoTracking(), "AUTO_ID", "CategoryName");
             //return View(products.ToPagedList(pageNumber, pageSize));
             var product_ = products.AsQueryable().AsNoTracking();
             return View(PaginatedList<Product>.CreateAsync(product_, pageNumber, pageSize));
@@ -165,7 +162,7 @@ namespace SportsStore.Controllers
                     var CoverProductImage = _context.ProductImages.Where(p => p.ProductID == productImages.ProductID && p.IsCover == 1).ToList();
                     if (CoverProductImage.Count() > 0) 
                     {
-                        CoverProductImage.FirstOrDefault().IsCover = null;
+                        CoverProductImage.FirstOrDefault()!.IsCover = null;
                         _context.Update(productImages);
                         await _context.SaveChangesAsync();
                     }
