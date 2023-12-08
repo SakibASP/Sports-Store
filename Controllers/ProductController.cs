@@ -47,32 +47,7 @@ namespace SportsStore.Controllers
             ViewData["CurrentFilter"] = searchString ?? "";
             ViewData["Price"] = price;
 
-            //var myprod = (from e in _context.Products
-            //             join c in _context.Category on e.Cat_Id equals c.AUTO_ID
-            //             join d in _context.ProductImages
-            //             on e.ProductID equals d.ProductID into prodDept
-            //             from ed in prodDept.DefaultIfEmpty()
-            //             select new ProductViewModel
-            //             {
-            //                 ProductID = ed.ProductID,
-            //                 ImageData = ed.ImageData,
-            //                 ImageName = ed.ImageName,
-            //                 CREATED_BY = ed.CREATED_BY,
-            //                 CREATED_DATE = ed.CREATED_DATE,
-            //                 CURRENT_STOCK = e.CURRENT_STOCK,
-            //                 Cat_Id = e.Cat_Id,
-            //                 Category = c.CategoryName,
-            //                 IsCover = ed.IsCover,
-            //                 IsAvailabe = e.IsAvailabe,
-            //                 Name = e.Name,
-            //                 ProductImageID = ed.AUTO_ID,
-            //                 Buying_Price = e.Buying_Price,
-            //                 Price = e.Price,
-            //                 Description = e.Description,
-            //                 ShortDesc = Utility.TruncateDescription(e.Description, 10),
-            //             }).Take(50000).ToList();
-
-            var product_mv = await Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageData == null).ToListAsync();
+            var product_mv = await Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageName == null).ToListAsync();
 
             product_mv = sortOrder switch
             {
@@ -111,10 +86,5 @@ namespace SportsStore.Controllers
 
             return View(product_mv);
         }
-        //protected override void Dispose(bool disposing)
-        //{
-        //    _context.Dispose();
-        //    base.Dispose(disposing);
-        //}
     }
 }

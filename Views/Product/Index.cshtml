@@ -101,11 +101,12 @@
                                 @Html.HiddenFor(x=>item.Price)
                                 @Html.HiddenFor(x=>item.CURRENT_STOCK)
                                 <div class="text-center">
-                                    @if (item.ImageData != null)
+                                    @if (item.ImagePath != null)
                                     {
                                         <div class="myimg" style="margin:2px;">
                                             <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
-                                                <img class="img-fluid" style="height:150px;width:150px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" />
+                                                <img class="img-fluid" style="height:150px;width:150px;" src="@Url.Content(item.ImagePath)" />
+                                                @* <img class="img-fluid" style="height:150px;width:150px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" /> *@
                                             </a>
                                         </div>
                                     }
@@ -215,11 +216,12 @@
                                 @Html.HiddenFor(x=>item.Price , new { @id = "m_price" })
                                 @Html.HiddenFor(x=>item.CURRENT_STOCK, new { @id = "m_stock" })
                                 <div class="text-center">
-                                    @if (item.ImageData != null)
+                                    @if (item.ProductImageID != null)
                                     {
                                         <div style="margin:2px;">
                                             <a href="@Url.ActionLink("Details", "Product", new { id = item.ProductID })">
-                                                <img class="img-fluid" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" />
+                                                <img class="img-fluid" style="height:75px;width:75px;" src="@Url.Content(item.ImagePath)" />
+                                                @* <img class="img-fluid" style="height:75px;width:75px;" src="data:ImageData;base64,@System.Convert.ToBase64String(item.ImageData)" /> *@
                                             </a>
                                         </div>
                                     }

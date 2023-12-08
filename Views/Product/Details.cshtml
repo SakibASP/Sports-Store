@@ -35,14 +35,15 @@
             @Html.DisplayFor(model => model.FirstOrDefault().Category)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model=>model.ImageData)
+            @Html.DisplayNameFor(model=>model.ImagePath)
         </dt>
         <dd  class = "col-sm-10">             
             @foreach (var i in Model)
             {
-                if (i.ImageData != null)
+                if (i.ImagePath != null)
                 {
-                    <img class="img-fluid" style="height:300px;width:300px;" src="data:ImageData;base64,@System.Convert.ToBase64String(i.ImageData)" />
+                    <img class="img-fluid" style="height:300px;width:300px;" src="@Url.Content(i.ImagePath)" />
+                   @*  <img class="img-fluid" style="height:300px;width:300px;" src="data:ImageData;base64,@System.Convert.ToBase64String(i.ImageData)" /> *@
                 }
                 else
                 {
@@ -55,3 +56,9 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

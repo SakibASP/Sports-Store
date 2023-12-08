@@ -40,12 +40,10 @@ namespace SportsStore.Models
         public int? Cat_Id { get; set; }
         public bool IsAvailabe { get; set; }
 
-        [DisplayName("Image")]
         [NotMapped]
-        public byte[]? ImageData { get; set; }
-
+        public string? ImageName { get; set; }  
         [NotMapped]
-        public string? ImageName { get; set; }
+        public string? ImagePath { get; set; }
 
         [NotMapped]
         public double TOTAL_PRICE { get { return (CURRENT_STOCK == 0 ? 1 : CURRENT_STOCK) * Buying_Price; } }

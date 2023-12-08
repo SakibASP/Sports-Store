@@ -16,25 +16,25 @@ namespace SportsStore.Common
 {
     public static class Utility 
     {
-        public static byte[]? Getimage(byte[]? img, IFormFileCollection files)
-        {
-            Product prod = new Product();
-            MemoryStream ms = new MemoryStream();
-            if (files != null)
-            {
-                foreach (var file in files)
-                {
-                    file.CopyTo(ms);
-                    prod.ImageData = ms.ToArray();
+        //public static byte[]? Getimage(byte[]? img, IFormFileCollection files)
+        //{
+        //    Product prod = new Product();
+        //    MemoryStream ms = new MemoryStream();
+        //    if (files != null)
+        //    {
+        //        foreach (var file in files)
+        //        {
+        //            file.CopyTo(ms);
+        //            prod.ImageData = ms.ToArray();
 
-                    ms.Close();
-                    ms.Dispose();
+        //            ms.Close();
+        //            ms.Dispose();
 
-                    img = prod.ImageData;
-                }
-            }
-            return img;
-        }
+        //            img = prod.ImageData;
+        //        }
+        //    }
+        //    return img;
+        //}
         public static string TruncateDescription(string myString, int maxLength)
         {
             // If the string isn't null or empty
@@ -84,7 +84,7 @@ namespace SportsStore.Common
                           select new ProductViewModel
                           {
                               ProductID = ed.ProductID,
-                              ImageData = ed.ImageData,
+                              //ImageData = ed.ImageData,
                               ImageName = ed.ImageName,
                               CREATED_BY = ed.CREATED_BY,
                               CREATED_DATE = ed.CREATED_DATE,

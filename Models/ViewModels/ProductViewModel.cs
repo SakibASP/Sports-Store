@@ -17,9 +17,8 @@ namespace SportsStore.Models.ViewModels
         [DisplayName("Buy Price")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
         public double Buying_Price { get; set; }
-        [DisplayName("Image")]
-        public byte[]? ImageData { get; set; }
         public string? ImageName { get; set; }
+        public string? ImagePath { get; set; }
         public string? CREATED_BY { get; set; }
         public string? ShortDesc { get; set; }
         public DateTime? CREATED_DATE { get; set; }

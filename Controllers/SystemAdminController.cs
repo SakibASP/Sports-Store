@@ -72,53 +72,6 @@ namespace SportsStore.Controllers
                 return NotFound();
 
             List<ProductViewModel> product_mv = Utility.GetProducts(_context, id, null, null, null);
-
-            // From session
-            //if (S_PRODUCT_LIST != null)
-            //{
-            //    product_mv = S_PRODUCT_LIST.Where(p => p.ProductID == id).ToList();
-            //}
-            //else
-            //{
-            //    var product = _context.Products.Include(c => c.Category1).Where(m => m.ProductID == id).FirstOrDefault();
-            //    var product_img = _context.ProductImages.Where(m => m.ProductID == id).ToList();
-
-            //    if (product_img.Count > 0)
-            //    {
-            //        foreach (var i in product_img)
-            //        {
-            //            product_mv.Add(new ProductViewModel
-            //            {
-            //                ProductID = i.ProductID,
-            //                ProductImageID = i.AUTO_ID,
-            //                ImageData = i.ImageData,
-            //                ImageName = i.ImageName,
-            //                Category = product.Category1.CategoryName,
-            //                Description = product.Description,
-            //                Name = product.Name,
-            //                Cat_Id = product.Cat_Id,
-            //                Price = product.Price,
-            //                Buying_Price = product.Buying_Price
-            //            });
-            //        }
-            //    }
-            //    else
-            //    {
-            //        product_mv.Add(new ProductViewModel
-            //        {
-            //            ProductID = product.ProductID,
-            //            ImageData = product.ImageData,
-            //            ImageName = product.ImageName,
-            //            Category = product.Category1.CategoryName,
-            //            Description = product.Description,
-            //            Name = product.Name,
-            //            Cat_Id = product.Cat_Id,
-            //            Price = product.Price,
-            //            Buying_Price = product.Buying_Price
-            //        });
-            //    }
-            //}
-
             if (product_mv == null)
                 return NotFound();
 
@@ -133,6 +86,15 @@ namespace SportsStore.Controllers
                 var productImages = await _context.ProductImages.FindAsync(id);
                 if(productImages != null)
                 {
+                    // Construct the full file path to the image
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", productImages.ImagePath!);
+
+                    // Check if the image file exists
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        // Delete the image file from the server's file system
+                        System.IO.File.Delete(imagePath);
+                    }
                     _context.Remove(productImages);
                     await _context.SaveChangesAsync();
 
@@ -196,12 +158,20 @@ namespace SportsStore.Controllers
                 var img = Request.Form.Files.FirstOrDefault();
                 if (img != null)
                 {
+                    var imagePath = "uploads/" + img.FileName;
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await img.CopyToAsync(stream);
+                    }
+
                     productImages.ProductID = ProductID;
                     productImages.IsCover = isCover;
                     productImages.CREATED_BY = CurrentUserName;
                     productImages.CREATED_DATE = DateTime.Now;
                     productImages.ImageName = img.FileName;
-                    productImages.ImageData = Utility.Getimage(productImages.ImageData, Request.Form.Files);
+                    productImages.ImagePath = imagePath;
 
                     _context.Add(productImages);
                     await _context.SaveChangesAsync();
@@ -240,7 +210,6 @@ namespace SportsStore.Controllers
                     if (imgFile != null)
                     {
                         product.ImageName = imgFile.FileName;
-                        product.ImageData = Utility.Getimage(product.ImageData, Request.Form.Files);
                     }
                     product.CREATED_BY = CurrentUserName;
                     product.CREATED_DATE = DateTime.Now;
@@ -251,7 +220,7 @@ namespace SportsStore.Controllers
 
                     _context.Add(product);
                     await _context.SaveChangesAsync();
-                    await AddImages(product.ProductID,1);
+                    await AddImages(product.ProductID, 1);
 
                     HttpContext.Session.Remove(Constant.PRODUCTS_LIST);
                     HttpContext.Session.Remove(Constant.TOTAL_PRODUCTS_LIST);
@@ -302,7 +271,6 @@ namespace SportsStore.Controllers
                     if(img_file != null)
                     {
                         product.ImageName = img_file.FileName;
-                        product.ImageData = Utility.Getimage(product.ImageData, Request.Form.Files);
                     }
                     if (product.CURRENT_STOCK > 0)
                     {
