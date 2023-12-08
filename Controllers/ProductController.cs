@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Braintree;
-using iText.IO.Image;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math;
 using SportsStore.Common;
 using SportsStore.Data;
 using SportsStore.Helper;
-using SportsStore.Models;
 using SportsStore.Models.ViewModels;
-using X.PagedList;
 //using X.PagedList;
 
 
@@ -47,14 +37,14 @@ namespace SportsStore.Controllers
             ViewData["CurrentFilter"] = searchString ?? "";
             ViewData["Price"] = price;
 
-            var product_mv = await Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageName == null).ToListAsync();
+            var product_mv =  Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageName == null).ToList();
 
             product_mv = sortOrder switch
             {
-                "name_desc" => await product_mv
+                "name_desc" =>  product_mv
                                         .Where(p => p.IsCover == 1).OrderByDescending(s => s.Name)
-                                        .ToListAsync(),
-                _ => await product_mv.ToListAsync(),
+                                        .ToList(),
+                _ =>  product_mv.ToList(),
             };
             int pageSize = 6;
             int pageNumber = (page ?? 1);

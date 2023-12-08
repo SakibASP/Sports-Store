@@ -52,9 +52,9 @@ namespace SportsStore.Controllers
 
             products = sortOrder switch
             {
-                "name_desc" => await products.OrderByDescending(s => s.Name).ToListAsync(),
+                "name_desc" =>  products.OrderByDescending(s => s.Name).ToList(),
                 // Name ascending 
-                _ => await products.OrderBy(s => s.Name).ToListAsync(),
+                _ =>  products.OrderBy(s => s.Name).ToList(),
             };
             int pageSize = 6;
             int pageNumber = (page ?? 1);

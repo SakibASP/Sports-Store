@@ -40,6 +40,7 @@ builder.Services.AddTransient<IBraintreeService, BraintreeService>();
 
 //Reporting
 FastReport.Utils.RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+builder.Services.AddFastReport();
 
 //Model Binding
 builder.Services.AddMvc(o =>
@@ -57,6 +58,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddDistributedMemoryCache();
+
 //builder.Services.AddDistributedSqlServerCache(options =>
 //{
 //    options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");

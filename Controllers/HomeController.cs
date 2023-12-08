@@ -1,15 +1,9 @@
-﻿using DotLiquid;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using SportsStore.Common;
 using SportsStore.Data;
-using SportsStore.Helper;
 using SportsStore.Models;
-using SportsStore.Models.ViewModels;
 using System.Data;
 using System.Diagnostics;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SportsStore.Controllers
 {

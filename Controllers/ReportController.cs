@@ -1,21 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FastReport.Web;
-using System.Text;
 using System.Data;
-using System.Composition;
-using Microsoft.Extensions.Hosting;
 using SportsStore.Models;
-using FastReport;
 using FastReport.Data;
 using SportsStore.Data;
-using System.Linq;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Reflection;
 using SportsStore.ReportModels;
-using System;
 using System.Data.SqlClient;
-using Braintree;
-using System.Dynamic;
 using iText.Html2pdf;
 using SportsStore.Common;
 
