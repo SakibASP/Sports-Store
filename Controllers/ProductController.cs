@@ -20,7 +20,7 @@ namespace SportsStore.Controllers
 
         // GET: Product
         //image/jpeg
-        public async Task<ActionResult> Index(int? cat_id,int? price, string? sortOrder, string? currentFilter, string? searchString,int? page)
+        public async Task<IActionResult> Index(int? cat_id,int? price, string? sortOrder, string? currentFilter, string? searchString,int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -37,14 +37,16 @@ namespace SportsStore.Controllers
             ViewData["CurrentFilter"] = searchString ?? "";
             ViewData["Price"] = price;
 
-            var product_mv =  Utility.GetProducts(_context, null, cat_id, price, searchString).Where(p => p.IsCover == 1 || p.ImageName == null).ToList();
-
+            List<ProductViewModel> allProducts = await Utility.GetProducts(_context, null, cat_id, price, searchString);
+            var coveredProduct = allProducts.Where(p => p.IsCover == 1).Distinct();
+            var noCoveredProduct = allProducts.Where(p => p.ImagePath is null && !coveredProduct.Any(c => c.ProductID == p.ProductID)).Distinct();
+            List<ProductViewModel> product_mv = [.. coveredProduct, .. noCoveredProduct];
+            //same as the above code, we can use both Concat or '..'
+            //List<ProductViewModel> product_mv2 = new List<ProductViewModel>(coveredProduct.Concat(noCoveredProduct));
             product_mv = sortOrder switch
             {
-                "name_desc" =>  product_mv
-                                        .Where(p => p.IsCover == 1).OrderByDescending(s => s.Name)
-                                        .ToList(),
-                _ =>  product_mv.ToList(),
+                "name_desc" => [.. product_mv.OrderByDescending(s => s.Name)],
+                _ => [.. product_mv.OrderByDescending(x => x.CREATED_DATE)],
             };
             int pageSize = 6;
             int pageNumber = (page ?? 1);
@@ -60,14 +62,14 @@ namespace SportsStore.Controllers
         }
 
         // GET: Product/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductImages == null)
             {
                 return NotFound();
             }
 
-            List<ProductViewModel> product_mv = Utility.GetProducts(_context, id, null, null, null);
+            List<ProductViewModel> product_mv = await Utility.GetProducts(_context, id, null, null, null);
 
             if (product_mv == null)
             {

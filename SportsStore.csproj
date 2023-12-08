@@ -58,7 +58,6 @@
   <ItemGroup>
     <Folder Include="Reports\" />
     <Folder Include="wwwroot\img\" />
-    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
   <ItemGroup>

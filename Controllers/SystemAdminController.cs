@@ -66,12 +66,12 @@ namespace SportsStore.Controllers
         }
 
         // GET: SystemAdmin/Details/5
-        public ActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductImages == null)
                 return NotFound();
 
-            List<ProductViewModel> product_mv = Utility.GetProducts(_context, id, null, null, null);
+            List<ProductViewModel> product_mv = await Utility.GetProducts(_context, id, null, null, null);
             if (product_mv == null)
                 return NotFound();
 
@@ -156,21 +156,27 @@ namespace SportsStore.Controllers
             {
                 ProductImages productImages = new ProductImages();
                 var img = Request.Form.Files.FirstOrDefault();
-                if (img != null)
+                var pRODUCT = await _context.Products.FindAsync(ProductID);
+                if (img is not null && pRODUCT is not null)
                 {
-                    var imagePath = "uploads/" + img.FileName;
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
+                    var catName = _context.Category.Find(pRODUCT.Cat_Id)?.CategoryName ?? "Anonymous";
+                    string? imagePath = catName + "/" + GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.ProductID);
+                    string? filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath);
 
+                    // Check if the directory exists; if not, create it
+                    string? catPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", catName);
+                    if (!Directory.Exists(catPath))
+                        Directory.CreateDirectory(catPath);
+                    
                     using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
                         await img.CopyToAsync(stream);
-                    }
+                    
 
                     productImages.ProductID = ProductID;
                     productImages.IsCover = isCover;
                     productImages.CREATED_BY = CurrentUserName;
                     productImages.CREATED_DATE = DateTime.Now;
-                    productImages.ImageName = img.FileName;
+                    productImages.ImageName = GetImageNameWithExtension(img.FileName, pRODUCT.Name + "_" + pRODUCT.ProductID);
                     productImages.ImagePath = imagePath;
 
                     _context.Add(productImages);
@@ -181,13 +187,28 @@ namespace SportsStore.Controllers
                     TempData["Success"] = "Successfully added.";
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 TempData["Error"] = "Failed! Something went wrong";
             }
             return RedirectToAction(nameof(Index));
         }
 
+        private string? GetImageNameWithExtension(string fileName,string productName)
+        {
+            if (string.IsNullOrEmpty(fileName) || string.IsNullOrEmpty(productName))
+            {
+                return null;
+            }
+            int lastDotIndex = fileName.LastIndexOf('.');
+            if (lastDotIndex >= 0)
+            {
+                fileName = productName!.Replace(" ", "") + fileName.Substring(lastDotIndex);
+            }
+
+            return fileName;
+        }
         // GET: SystemAdmin/Create
         public IActionResult Create()
         {

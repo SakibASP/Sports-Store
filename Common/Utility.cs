@@ -49,7 +49,7 @@ namespace SportsStore.Common
                 return string.Empty;
             }
         }
-        public static List<ProductViewModel> GetProducts(ApplicationDbContext db,int? p_id, int? cat_id_, int? price_, string? searchString_)
+        public static async Task<List<ProductViewModel>> GetProducts(ApplicationDbContext db,int? p_id, int? cat_id_, int? price_, string? searchString_)
         {
             db.Database.SetCommandTimeout(600);
 
@@ -70,7 +70,7 @@ namespace SportsStore.Common
             //var cmdText = "EXEC GetProducts @product_id=@product_id, @cat_id=@cat_id,@price=@price,@searchString=@searchString";
             //var productViewModel = db.Set<ProductViewModel>().FromSqlRaw(cmdText, product_id,cat_id, price,searchString).ToList();
 
-            var productViewModel = db.ProductViewModel.FromSqlRaw(SP.GetProducts, @params).ToList();
+            var productViewModel = await db.ProductViewModel.FromSqlRaw(SP.GetProducts, @params).ToListAsync();
             return productViewModel;
         }
         

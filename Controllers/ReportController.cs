@@ -136,7 +136,7 @@ namespace SportsStore.Controllers
         [HttpPost]
         public IActionResult Export(string GridHtml)
         {
-            using (MemoryStream stream = new MemoryStream())
+            using (MemoryStream stream = new())
             {
                 HtmlConverter.ConvertToPdf(GridHtml, stream);
                 return File(stream.ToArray(), "application/pdf");
