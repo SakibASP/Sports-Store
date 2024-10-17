@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SportsStore.Binder;
 using SportsStore.Common;
 using SportsStore.Data;
+using SportsStore.Interfaces;
 using SportsStore.Models;
 using SportsStore.Services;
 using System.Security.Claims;

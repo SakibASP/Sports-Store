@@ -10,13 +10,9 @@ using SportsStore.Models.ViewModels;
 
 namespace SportsStore.Controllers
 {
-    public class ProductController : BaseController<ProductController>
+    public class ProductController(ApplicationDbContext context) : BaseController<ProductController>
     {
-        private readonly ApplicationDbContext _context;
-        public ProductController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         // GET: Product
         //image/jpeg

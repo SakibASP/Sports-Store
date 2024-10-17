@@ -1,33 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsStore.Data;
 using SportsStore.Helper;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
 using SportsStore.Common;
+using SportsStore.Interfaces;
 
 namespace SportsStore.Controllers
 {
     [Authorize]
-    public class CartController : BaseController<CartController>
+    public class CartController(ApplicationDbContext context, IOrderProcessor orderProcessor) : BaseController<CartController>
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IOrderProcessor _orderProcessor;
-        public CartController(ApplicationDbContext context, IOrderProcessor orderProcessor)
-        {
-            _context = context;
-            _orderProcessor = orderProcessor;
-        }
-
         public ViewResult Index(Cart cart,string returnUrl)
         {
-            CartIndexViewModel cartIndex = new CartIndexViewModel
+            CartIndexViewModel cartIndex = new()
             {
                 //Cart = GetCart(),
                 Cart= cart,
@@ -43,7 +31,7 @@ namespace SportsStore.Controllers
         public ActionResult AddToCart(Cart cart,int productId, string returnUrl)
         {
             //var cart = GetCart();
-            Product? product = _context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
+            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
             if (product != null)
             {
                 try
@@ -87,7 +75,7 @@ namespace SportsStore.Controllers
         public RedirectToActionResult RemoveFromCart(Cart cart,int productId, string returnUrl)
         {
             //var cart = GetCart();
-            Product? product = _context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
+            Product? product = context.Products.Include(c=>c.Category1).FirstOrDefault(p => p.ProductID == productId);
             if (product != null)
             {
                 try
@@ -129,7 +117,7 @@ namespace SportsStore.Controllers
         //Shipping Details
         public ViewResult Checkout(Cart cart)
         {
-            ShippingDetails shippingDetails = new ShippingDetails 
+            ShippingDetails shippingDetails = new()
             { 
                 IsConfirmed = false,
                 CREATE_BY = CurrentUserName,
@@ -142,10 +130,10 @@ namespace SportsStore.Controllers
             return View(shippingDetails);
         }
         [HttpPost]
-        public ActionResult Checkout(Cart cart, ShippingDetails shippingDetails)
+        public async Task<IActionResult> Checkout(Cart cart, ShippingDetails shippingDetails)
         {
-            ShipmentOrders shipmentOrders = new ShipmentOrders();
-            if (cart.Lines.Count() == 0)
+            ShipmentOrders shipmentOrders = new();
+            if (!cart.Lines.Any())
             {
                 ModelState.AddModelError("", "Sorry, your cart is empty!");               
             }
@@ -153,8 +141,8 @@ namespace SportsStore.Controllers
             {
                 try
                 {                   
-                    _context.ShippingDetails.Add(shippingDetails);
-                    _context.SaveChanges();
+                    await context.ShippingDetails.AddAsync(shippingDetails);
+                    await context.SaveChangesAsync();
                     foreach(var i in cart.Lines)
                     {
                         shipmentOrders.AUTO_ID = null;
@@ -167,11 +155,11 @@ namespace SportsStore.Controllers
                         shipmentOrders.CREATE_BY = shippingDetails.CREATE_BY;
                         shipmentOrders.CREATE_DATE = shippingDetails.CREATE_DATE;
 
-                        _context.ShipmentOrders.Add(shipmentOrders);
-                        _context.SaveChanges();
+                        await context.ShipmentOrders.AddAsync(shipmentOrders);
+                        await context.SaveChangesAsync();
                     }
                     
-                    _orderProcessor.ProcessOrder(cart, shippingDetails);
+                    await orderProcessor.ProcessOrder(cart, shippingDetails);
                     cart.Clear();
 
                     TempData["Success"] = "Mail has been sent successfully.";
@@ -194,7 +182,7 @@ namespace SportsStore.Controllers
         }
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose();
+            context.Dispose();
             base.Dispose(disposing);
         }
     }

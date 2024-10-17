@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SportsStore.Common;
 using SportsStore.Data;
 using SportsStore.Helper;
+using SportsStore.Interfaces;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
-using SportsStore.Services;
 
 namespace SportsStore.Controllers
 {

@@ -18,6 +18,7 @@ namespace SportsStore.Models
         [Required(ErrorMessage = "Please enter your phone number")]
         public string? MOBLIE_NUMBER { get; set; }
 
+        [EmailAddress]
         [Display(Name = "Email")]
         [Required(ErrorMessage = "Please enter your e-mail address")]
         public string? EMAIL { get; set; }

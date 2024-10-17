@@ -1,6 +1,6 @@
 ﻿using Braintree;
 
-namespace SportsStore.Services
+namespace SportsStore.Interfaces
 {
     public interface IBraintreeService
     {

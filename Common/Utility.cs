@@ -53,17 +53,25 @@ namespace SportsStore.Common
         {
             db.Database.SetCommandTimeout(600);
 
-            var product_id = new SqlParameter("@product_id", SqlDbType.Int);
-            product_id.Value = (object?)p_id ?? DBNull.Value;
-            
-            var cat_id = new SqlParameter("@cat_id", SqlDbType.Int);
-            cat_id.Value = (object?)cat_id_ ?? DBNull.Value;
+            var product_id = new SqlParameter("@product_id", SqlDbType.Int)
+            {
+                Value = (object?)p_id ?? DBNull.Value
+            };
 
-            var price = new SqlParameter("@price", SqlDbType.Int);
-            price.Value = (object?)price_ ?? DBNull.Value;
+            var cat_id = new SqlParameter("@cat_id", SqlDbType.Int)
+            {
+                Value = (object?)cat_id_ ?? DBNull.Value
+            };
 
-            var searchString = new SqlParameter("@searchString", SqlDbType.VarChar);
-            searchString.Value = (object?)searchString_ ?? DBNull.Value;
+            var price = new SqlParameter("@price", SqlDbType.Int)
+            {
+                Value = (object?)price_ ?? DBNull.Value
+            };
+
+            var searchString = new SqlParameter("@searchString", SqlDbType.VarChar)
+            {
+                Value = (object?)searchString_ ?? DBNull.Value
+            };
 
             var @params = new[] { product_id, cat_id, price, searchString };
 

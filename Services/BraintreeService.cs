@@ -1,16 +1,11 @@
 ﻿using Braintree;
+using SportsStore.Interfaces;
 
 namespace SportsStore.Services
 {
-    public class BraintreeService : IBraintreeService
+    public class BraintreeService(IConfiguration config) : IBraintreeService
     {
-        private readonly IConfiguration _config;
-
-        public BraintreeService(IConfiguration config)
-        {
-            _config = config;
-        }
-
+        private readonly IConfiguration _config = config;
 
         public IBraintreeGateway CreateGateway()
         {

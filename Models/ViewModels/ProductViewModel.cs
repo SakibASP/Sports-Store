@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
 namespace SportsStore.Models.ViewModels
@@ -17,7 +16,10 @@ namespace SportsStore.Models.ViewModels
         [DisplayName("Buy Price")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive price")]
         public double Buying_Price { get; set; }
+        [DisplayName("Name")]
         public string? ImageName { get; set; }
+
+        [DisplayName("Image")]
         public string? ImagePath { get; set; }
         public string? CREATED_BY { get; set; }
         public string? ShortDesc { get; set; }
