@@ -9,3 +9,5 @@
 /.vs
 /bin/Debug/net7.0
 /bin/Debug/net8.0
+/Common/EmailSettings.cs
+/appsettings.json
